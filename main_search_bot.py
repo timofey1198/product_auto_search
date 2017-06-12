@@ -116,7 +116,4 @@ def start():
 
 
 if __name__ == '__main__':
-    #for m in get_updates():
-        #print(m)
-    #print(get_last_message())
     start()
