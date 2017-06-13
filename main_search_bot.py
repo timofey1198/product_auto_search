@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
+import time
+import random
 import auto_test
 import avito_html_parse
 
@@ -84,6 +86,10 @@ def start():
                 else:
                     items = avito_html_parse.get_items('answer.html')
                     last_item = avito_html_parse.get_last_item_info(items)
+                    if items == None:
+                        send_message(chat, 'Данный ресурс временно недоступен')
+                        set_num(message_id)
+                        continue
                     message = last_item[0] + '\n' + last_item[1]
                     send_message(chat, message)
                     set_num(message_id)
@@ -99,9 +105,11 @@ def start():
                             send_message(chat, message)
                             set_num(message_id)
                             break
+                        r = auto_test.request_url(url)
                         new_items = avito_html_parse.get_items('answer.html')
                         new_last_item = avito_html_parse.get_last_item_info(new_items)
                         if new_last_item == last_item:
+                            #time.sleep(random.randint(120, 180))
                             continue
                         else:
                             items = new_items
@@ -116,4 +124,4 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    pass
