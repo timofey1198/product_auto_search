@@ -2,8 +2,11 @@
 import requests
 import time
 import avito_html_parse
+from os.path import dirname, realpath
 
+main_path = dirname(os.path.realpath(__name__))
 avalible_urls = ['http://avito.ru', 'http://www.avito.ru']
+
 
 def is_valid_url(url):
     for u in avalible_urls:

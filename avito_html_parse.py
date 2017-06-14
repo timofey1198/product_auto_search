@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import lxml.html as html
+from os.path import dirname, realpath
+
+main_path = dirname(os.path.realpath(__name__))
+
 
 def get_items(filename):
     try:
