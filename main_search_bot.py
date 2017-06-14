@@ -4,17 +4,19 @@ import time
 import random
 import auto_test
 import avito_html_parse
+from os.path import dirname, realpath
 
+main_path = dirname(realpath(__name__))
 access_token = '389357078:AAG4b2zaoc-8bz4QU0gvwU5CZiUSZ38bpGo'
 
 
 def get_num():
-    f = open('settings', 'r')
+    f = open(main_path + '/data/settings', 'r')
     N = int(f.read())
     return N
 
 def set_num(n):
-    f = open('settings', 'w+')
+    f = open(main_path + '/data/settings', 'w+')
     f.write(str(n))
     f.close()
 

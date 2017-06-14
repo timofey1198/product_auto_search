@@ -4,7 +4,7 @@ import time
 import avito_html_parse
 from os.path import dirname, realpath
 
-main_path = dirname(os.path.realpath(__name__))
+main_path = dirname(realpath(__name__))
 avalible_urls = ['http://avito.ru', 'http://www.avito.ru']
 
 
@@ -38,12 +38,12 @@ def request_url(url):
                                        }
                           )
         
-        log = open('log/search/%s.txt'%get_str_time(), 'w+')
+        log = open(main_path + '/log/search/%s.txt'%get_str_time(), 'w+')
         for key in r.headers:
             log.write('{k} : {v}\n'.format(k = key, v = r.headers[key]))
         log.close()
         
-        f = open('answer.html', 'w+', encoding='utf-8')
+        f = open(main_path + '/answer.html', 'w+', encoding='utf-8')
         f.write(r.text)
         f.close()
     except:
