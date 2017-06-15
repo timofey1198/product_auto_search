@@ -28,7 +28,12 @@ def send_message(chat_id, message):
             text = message)
     r = requests.post(url)
 
+
+
 def get_updates():
+    '''
+    Get all updates for this bot
+    '''    
     url = 'https://api.telegram.org/bot{token}/{method}'.format(
         token = access_token,
         method = 'getUpdates')
@@ -86,7 +91,8 @@ def start():
                     send_message(chat, 'Продукт не найден')
                     set_num(message_id)
                 else:
-                    items = avito_html_parse.get_items('answer.html')
+                    items = avito_html_parse.get_items(main_path + 
+                                                       '/data/answer.html')
                     last_item = avito_html_parse.get_last_item_info(items)
                     if items == None:
                         send_message(chat, 'Данный ресурс временно недоступен')
