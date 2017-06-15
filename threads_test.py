@@ -4,11 +4,13 @@ import random
 import time
 from threading import Thread
 from auto_test import get_str_time
+import main_search_bot
 
 
-class MyThread(Thread):
+class LinkSerfer(Thread):
     """
-    A threading example
+    Thread to serf links.db and
+    send updates for users
     """
     
     def __init__(self, name):
@@ -22,20 +24,19 @@ class MyThread(Thread):
         time.sleep(amount)
         msg = "%s is running" % self.name
         print(msg)
-        f = open('%s.txt' % self.name, 'w+')
-        f.write(get_str_time()+'\n')
-        f.write(str(time.time()))
-        f.close()
+        #
+        # Тут оснвная работа программы
+        #
     
 def create_threads():
     """
     Создаем группу потоков
     """
-    for i in range(5):
+    for i in range(1):
         name = "Thread %s" % (i+1)
         my_thread = MyThread(name)
         my_thread.start()
 
 
 if __name__ == "__main__":
-    create_threads()
+    print(main_search_bot.access_token)
