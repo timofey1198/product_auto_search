@@ -43,7 +43,7 @@ def request_url(url):
             log.write('{k} : {v}\n'.format(k = key, v = r.headers[key]))
         log.close()
         
-        f = open(main_path + '/answer.html', 'w+', encoding='utf-8')
+        f = open(main_path + '/data/answer.html', 'w+', encoding='utf-8')
         f.write(r.text)
         f.close()
     except:
