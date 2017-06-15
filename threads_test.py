@@ -5,6 +5,7 @@ import time
 from threading import Thread
 from auto_test import get_str_time
 import main_search_bot
+import data
 
 
 class LinkSerfer(Thread):
@@ -26,6 +27,13 @@ class LinkSerfer(Thread):
         print(msg)
         #
         # Тут оснвная работа программы
+        while True:
+            base_len = data.get_last_link_num()
+            for num in range(1, base_len + 1):
+                if data.get_status(num) == 'work':
+                    link = data.get_link(num)
+                    # Тут обработка ссылки и отправка
+                    # обновлений (если они есть)
         #
     
 def create_threads():
