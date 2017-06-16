@@ -13,7 +13,7 @@ cursor = conn.cursor()
 '''
 cursor.execute("""CREATE TABLE links
                   (id integer primary key, chat_id integer, status text,
-                   link text)
+                   link text, answer text)
                """)
 '''
 
@@ -24,7 +24,7 @@ def get_last_link_num():
     cursor.execute(sql)
     return cursor.fetchall()[0][0]
 
-def new_user(chat_id, link, status = 'work'):
+def new_user(chat_id, link, answer, status = 'work'):
     number = get_last_link_num()
     if number == None:
         number = 0
@@ -32,11 +32,11 @@ def new_user(chat_id, link, status = 'work'):
     conn = sqlite3.connect(main_path + '/data/links.db')
     cursor = conn.cursor()
     cursor.execute("""INSERT INTO links
-                   VALUES (?, ?, ?, ?)
-                   """, [str(number), str(chat_id), status, link])
+                   VALUES (?, ?, ?, ?, ?)
+                   """, [str(number), str(chat_id), status, link, answer])
     conn.commit()
 
-def update_link(chat_id, new_link):
+def set_link(chat_id, new_link):
     conn = sqlite3.connect(main_path + '/data/links.db')
     cursor = conn.cursor()
     cursor.execute("""
@@ -46,7 +46,7 @@ def update_link(chat_id, new_link):
     """, [new_link, str(chat_id)])
     conn.commit()
 
-def new_status(chat_id, status):
+def set_status(chat_id, status):
     '''
     Change link status
     available statuses: {'work', 'closed', 'found', 'test'}
@@ -58,6 +58,15 @@ def new_status(chat_id, status):
     SET status=?
     WHERE chat_id=?
     """, [status, str(chat_id)])
+    conn.commit()
+
+def set_answer(num, answer):
+    cursor = conn.cursor()
+    cursor.execute("""
+    UPDATE links
+    SET answer=?
+    WHERE id=?
+    """, [answer, str(num)])
     conn.commit()
 
 def get_link_info(num):
@@ -74,6 +83,10 @@ def get_link_info(num):
                    """, [("%i"%num)])
     return cursor.fetchall()[0]
 
+def get_answer(num):
+    info = get_link_info(num)
+    return info[4]    
+
 def get_link(num):
     info = get_link_info(num)
     return info[3]
@@ -86,10 +99,16 @@ def get_chat_id(num):
     info = get_link_info(num)
     return info[1]
 
+def delete_user(num): 
+    conn = sqlite3.connect(main_path + '/data/links.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM links WHERE id=?", [("%i"%num)])
+    conn.commit()
+
 
 if __name__ == '__main__':
-    new_status(111111, 'test')
-    print(get_link_info(1))
+    #delete_user(2)
+    print(get_last_link_num())
     #new_user(111111, 'http://test.test', 'test')
     #print(help(main_search_bot))
     #pass
