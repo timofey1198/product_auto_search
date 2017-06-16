@@ -28,12 +28,17 @@ class LinkSerfer(Thread):
         #
         # Тут оснвная работа программы
         while True:
-            base_len = data.get_last_link_num()
-            for num in range(1, base_len + 1):
-                if data.get_status(num) == 'work':
-                    link = data.get_link(num)
-                    # Тут обработка ссылки и отправка
-                    # обновлений (если они есть)
+            working_users = data.get_users_info('work')
+            for user in working_users:
+                link = user[3]
+                answer = user[4]
+                new_answer = main_search_bot.get_link_answer(link)
+                if answer != new_answer:
+                    num = user[0]
+                    chat_id = user[1]
+                    data.set_answer(num, new_answer)
+                    main_search_bot.send_message(chat_id, new_answer)
+                time.sleep(61)
         #
     
 def create_threads():
