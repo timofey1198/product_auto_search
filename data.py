@@ -49,7 +49,7 @@ def set_link(chat_id, new_link):
 def set_status(chat_id, status):
     '''
     Change link status
-    available statuses: {'work', 'closed', 'found', 'test'}
+    available statuses: {'ready', 'work', 'closed', 'found', 'test'}
     '''
     conn = sqlite3.connect(main_path + '/data/links.db')
     cursor = conn.cursor()
@@ -83,6 +83,13 @@ def get_link_info(num):
                    """, [("%i"%num)])
     return cursor.fetchall()[0]
 
+def get_num(chat_id):
+    conn = sqlite3.connect(main_path + '/data/links.db')
+    cursor = conn.cursor()
+    cursor.execute("""SELECT id FROM links WHERE chat_id=?
+                   """, [("%i"%chat_id)])
+    return cursor.fetchall()[0][0]
+
 def get_answer(num):
     info = get_link_info(num)
     return info[4]    
@@ -105,10 +112,19 @@ def delete_user(num):
     cursor.execute("DELETE FROM links WHERE id=?", [("%i"%num)])
     conn.commit()
 
+def is_exist_user(chat_id):
+    conn = sqlite3.connect(main_path + '/data/links.db')
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM links WHERE chat_id=?
+                   """, [("%i" % chat_id)])
+    return bool(cursor.fetchall())
+
 
 if __name__ == '__main__':
     #delete_user(2)
     print(get_last_link_num())
+    print(is_exist_user(111111))
+    print(get_link_info(2))
     #new_user(111111, 'http://test.test', 'test')
     #print(help(main_search_bot))
     #pass
