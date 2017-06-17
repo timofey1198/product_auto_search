@@ -29,16 +29,22 @@ class LinkSerfer(Thread):
         # Тут оснвная работа программы
         while True:
             working_users = data.get_users_info('work')
+            br_flag = False
             for user in working_users:
+                chat_id = user[1]
+                if chat_id == 666:
+                    br_flag = True
+                    break
                 link = user[3]
                 answer = user[4]
                 new_answer = main_search_bot.get_link_answer(link)
                 if answer != new_answer:
                     num = user[0]
-                    chat_id = user[1]
                     data.set_answer(num, new_answer)
                     main_search_bot.send_message(chat_id, new_answer)
                 time.sleep(61)
+            if br_flag:
+                break
         #
     
 def create_threads():
@@ -47,7 +53,7 @@ def create_threads():
     """
     for i in range(1):
         name = "Thread %s" % (i+1)
-        my_thread = MyThread(name)
+        my_thread = LinkSerfer(name)
         my_thread.start()
 
 
