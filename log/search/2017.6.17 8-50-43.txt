@@ -1,0 +1,12 @@
+Server : nginx
+Date : Sat, 17 Jun 2017 08:50:47 GMT
+Content-Type : text/html; charset=utf-8
+Transfer-Encoding : chunked
+Connection : keep-alive
+Keep-Alive : timeout=75
+Cache-Control : no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Set-Cookie : sessid=fc60e2d017cb1f07ae1e8cbc843d83f8.1497689447; expires=Sun, 18-Jun-2017 08:50:47 GMT; Max-Age=86400; path=/; domain=.avito.ru; secure; HttpOnly; SameSite=Lax, u=26dp0wiv.1n4jwxp.fgoaqd2x81; expires=Mon, 17-Jun-2019 08:50:47 GMT; Max-Age=63072000; path=/; domain=.avito.ru; secure; HttpOnly; SameSite=Lax, v=1497689447; expires=Sat, 17-Jun-2017 09:20:47 GMT; Max-Age=1800; path=/; domain=.avito.ru; secure; HttpOnly; SameSite=Lax, dfp_group=40; expires=Tue, 18-Jul-2017 08:50:47 GMT; Max-Age=2678400; path=/; domain=.avito.ru; secure; HttpOnly; SameSite=Lax, nps_sleep=1; expires=Sat, 17-Jun-2017 08:55:47 GMT; Max-Age=300; path=/; domain=.avito.ru; secure; HttpOnly; SameSite=Lax
+Content-Encoding : gzip
+X-Frame-Options : SAMEORIGIN
+X-XSS-Protection : 1; mode=block
+X-Content-Type-Options : nosniff

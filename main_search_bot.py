@@ -5,6 +5,8 @@ import random
 import auto_test
 import avito_html_parse
 from os.path import dirname, realpath
+import data
+from threads_test import create_threads
 
 main_path = dirname(realpath(__name__))
 access_token = '389357078:AAG4b2zaoc-8bz4QU0gvwU5CZiUSZ38bpGo'
@@ -42,7 +44,24 @@ def get_updates():
         return r.json()['result']
     else:
         return 'Error!'
-    
+
+
+def get_link_answer(link):
+    r = auto_test.request_url(link)
+    if r:
+        items = avito_html_parse.get_items(main_path + '/data/answer.html')
+        if items == None:
+            return 'Ничего не найдено'
+        last_item_info = avito_html_parse.get_last_item_info(items)
+        if last_item_info == None:
+            return 'Ничего не найдено'
+        last_item_title, last_item_link = last_item_info
+        answer = last_item_title + '\n' + last_item_link
+        return answer
+    else:
+        return 'Неверный адрес'
+
+
 def get_last_message():
     results = get_updates()
     if bool(results):
@@ -59,12 +78,18 @@ def get_last_message():
 def start():
     print('Бот начал работу\n')
     while True:
+        # Получаем последнее принятое сообщение
         text, message_id, chat, user = get_last_message()
         if text == None:
             continue
         if message_id == get_num():
             continue
         else:
+            # Проверка на существование пользователя
+            if not data.is_exist_user(chat):
+                # Добавляем в базу нового пользователя
+                data.new_user(chat, '', '', 'closed')
+                
             if text == '/start' or text == '/new_search':
                 message = 'Добро пожаловать в программу автоматического \
                 поиска товаров и получения новейшей информации о них.'
@@ -72,59 +97,36 @@ def start():
                 message = 'Введите адрес ссылки для начала поиска:'
                 send_message(chat, message)
                 set_num(message_id)
+                data.set_status(chat, 'ready')              
                 
-                last_user = user
-                text, message_id, chat, user = get_last_message()
-                while True:
-                    if message_id == get_num():
-                        text, message_id, chat, user = get_last_message()
-                        continue
-                    else: break
-                print(text)
-                url = text
-                #if not is_valid_url(url):
-                    #while not is_valid_url(url):
-                        #url = input('Неверный адрес. Повторите ввод:\n')
-                
-                r = auto_test.request_url(url)
-                if not r:
-                    send_message(chat, 'Продукт не найден')
+            elif auto_test.is_valid_url(text):
+                num = data.get_num(chat)
+                status = data.get_status(num)
+                if status == 'ready':
+                    data.set_link(chat, text)
+                    data.set_status(chat, 'work')
+                    # Тут добавить поиск и добавление 
+                    # ответа по ссылке
+                    answer = get_link_answer(text)
+                    send_message(chat, answer)
+                    set_num(message_id)
+                    data.set_answer(num, answer)
+                    
+                elif status == 'work':
+                    message = 'В данное время уже ведется поиск.\n\
+                    Для нового поиска введите команду /new_search'
+                    send_message(chat, message)
                     set_num(message_id)
                 else:
-                    items = avito_html_parse.get_items(main_path + 
-                                                       '/data/answer.html')
-                    last_item = avito_html_parse.get_last_item_info(items)
-                    if items == None:
-                        send_message(chat, 'Данный ресурс временно недоступен')
-                        set_num(message_id)
-                        continue
-                    message = last_item[0] + '\n' + last_item[1]
+                    message = """Поиск еще не начат.\n
+                    Для нового поиска введите команду /new_search"""
                     send_message(chat, message)
                     set_num(message_id)
-                    message = 'Начат поиск...\nЧтобы выйти введите команду\
-                    /close_search'
-                    send_message(chat, message)
-                    set_num(message_id)
-                    while True:
-                        text, message_id, chat, user = get_last_message()
-                        if text == '/close_search':
-                            set_num(message_id)
-                            message = 'Для нового поиска введите /new_search'
-                            send_message(chat, message)
-                            set_num(message_id)
-                            break
-                        r = auto_test.request_url(url)
-                        new_items = avito_html_parse.get_items('answer.html')
-                        new_last_item = avito_html_parse.get_last_item_info(new_items)
-                        if new_last_item == last_item:
-                            #time.sleep(random.randint(120, 180))
-                            continue
-                        else:
-                            items = new_items
-                            last_item = new_last_item
-                            message = last_item[0] + '\n' + last_item[1]
-                            send_message(chat, message)
-                            set_num(message_id)
+                    
+            elif text == '/close_search':
+                # Прописать изменение статуса ссылки в базе
+                pass
+            
             else:
                 message = 'Hello, {name}!'.format(name = user)
                 set_num(message_id)
@@ -132,4 +134,6 @@ def start():
 
 
 if __name__ == '__main__':
+    create_threads()
     start()
+    #print(get_link_answer('http://www.avito.ru/moskva?q=kawasaki+kle+250'))
