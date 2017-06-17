@@ -42,6 +42,9 @@ class LinkSerfer(Thread):
                     num = user[0]
                     data.set_answer(num, new_answer)
                     main_search_bot.send_message(chat_id, new_answer)
+                    print('yes ' + time.ctime())
+                else:
+                    print('no ' + time.ctime())
                 time.sleep(61)
             if br_flag:
                 break
