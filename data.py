@@ -6,8 +6,8 @@ import main_search_bot
 main_path = dirname(realpath(__name__))
 
 
-conn = sqlite3.connect(main_path + '/data/links.db')
-cursor = conn.cursor()
+#conn = sqlite3.connect(main_path + '/data/links.db')
+#cursor = conn.cursor()
  
 # Создание таблицы
 '''
@@ -65,6 +65,7 @@ def set_status(chat_id, status):
 
 
 def set_answer(num, answer):
+    conn = sqlite3.connect(main_path + '/data/links.db')
     cursor = conn.cursor()
     cursor.execute("""
     UPDATE links
