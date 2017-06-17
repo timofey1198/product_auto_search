@@ -6,6 +6,7 @@ import auto_test
 import avito_html_parse
 from os.path import dirname, realpath
 import data
+from threads_test import create_threads
 
 main_path = dirname(realpath(__name__))
 access_token = '389357078:AAG4b2zaoc-8bz4QU0gvwU5CZiUSZ38bpGo'
@@ -133,5 +134,6 @@ def start():
 
 
 if __name__ == '__main__':
+    create_threads()
     start()
     #print(get_link_answer('http://www.avito.ru/moskva?q=kawasaki+kle+250'))
